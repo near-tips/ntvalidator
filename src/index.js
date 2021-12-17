@@ -38,6 +38,6 @@ app.use(cors({
 // mount api v1 routes
 app.use('/v1', routes);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })

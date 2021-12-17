@@ -6,7 +6,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const routes = require('./routes/v1');
 
-const port = 3000
+const port = 8080
 
 /**
  * Express instance

@@ -6,7 +6,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const routes = require('./routes/v1');
 
-const port = 8080
+const port = 8081
 
 /**
  * Express instance
@@ -38,6 +38,6 @@ app.use(cors({
 // mount api v1 routes
 app.use('/v1', routes);
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, '0.0.0.0', (hostname) => {
     console.log(`Example app listening at http://localhost:${port}`)
 })

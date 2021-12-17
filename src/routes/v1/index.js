@@ -6,7 +6,7 @@ const Base58 = require("base-58");
 
 const router = express.Router();
 
-router.use('/trans/sign', async (req, res) => {
+router.post('/trans/sign', async (req, res) => {
     try {
         const { accessToken, userId } = req.body;
 

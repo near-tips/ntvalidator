@@ -30,9 +30,8 @@ app.use(helmet());
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors({
-    origin: true, // allow to server to accept request from different origin
+    origin: ['https://app.near-tips.com'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true
 }));
 
 // mount api v1 routes

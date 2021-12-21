@@ -5,14 +5,17 @@ const methodOverride = require('method-override');
 const cors = require('cors');
 const helmet = require('helmet');
 const routes = require('./routes/v1');
-
-const port = 8081
+const morgan = require('morgan');
+const { logs, port, origin } = require('./config/vars');
 
 /**
  * Express instance
  * @public
  */
 const app = express();
+
+// request logging. dev: console | production: file
+app.use(morgan(logs));
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -30,7 +33,7 @@ app.use(helmet());
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors({
-    origin: '*',
+    origin,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
 

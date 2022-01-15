@@ -4,7 +4,8 @@ const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const helmet = require('helmet');
-const routes = require('./routes/v1');
+const v1 = require('./routes/v1');
+const routes = require('./routes');
 const morgan = require('morgan');
 const { logs, port, origin } = require('./config/vars');
 
@@ -38,8 +39,9 @@ app.use(cors({
 }));
 
 // mount api v1 routes
-app.use('/v1', routes);
+app.use('/v1', v1);
+app.use('/', routes);
 
-app.listen(port, '0.0.0.0', (hostname) => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })

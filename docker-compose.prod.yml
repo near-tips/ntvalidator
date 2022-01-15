@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  ntvalidator:
+    command: yarn start
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - ORIGIN=${ORIGIN}
+      - STACK_KEY=${STACK_KEY}
+    ports:
+      - ${PORT}:${PORT}

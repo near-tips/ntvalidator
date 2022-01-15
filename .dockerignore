@@ -1,0 +1,13 @@
+node_modules/
+.git/
+.vscode/
+coverage/
+.env
+
+.dockerignore
+Dockerfile
+
+.gitignore
+.eslintrc
+.editorconfig
+.gitlab-ci.yml

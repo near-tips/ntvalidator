@@ -3,23 +3,15 @@ const fs = require("fs");
 const { KeyPairEd25519 } = require("near-api-js/lib/utils");
 const axios = require("axios");
 const Base58 = require("base-58");
-const borsh = require("borsh");
 const { stackKey } = require('../../config/vars');
 const BigInteger = require('big-integer');
 
 const router = express.Router();
 
 const Service = {
-    Stackoverflow: 0,
-    Twitter: 1,
-    Telegram: 2
-}
-
-class ServiceId {
-    constructor({ service, id }) {
-        this.service = service
-        this.id = id
-    }
+    Stackoverflow: 'Stackoverflow',
+    Twitter: 'Twitter',
+    Telegram: 'Telegram'
 }
 
 const zero = BigInteger(0);
@@ -50,21 +42,16 @@ router.post('/trans/sign', async (req, res) => {
         const keyPair = new KeyPairEd25519(privateKey)
 
         // Struct serialization
-        const value = new ServiceId({ service: Service.Stackoverflow, id: userId })
-        const schema = new Map([
-            [ServiceId,
-                { kind: 'struct', fields: [['service', 'u8'], ['id', 'string']] }]
-        ]);
-        const bufferSerializedMessage = borsh.serialize(schema, value);
+        const value = { service: Service.Stackoverflow, id: userId }
 
         // Convert current date to Uint8Array
-        const date = Math.floor(new Date() / 1000)
+        const date = Math.floor(new Date() / 1000) + 3 * 60
         const bigInt = new BigInteger(date)
         const dateUint8Array = toBigEndian(bigInt);
 
         // Convert all message elements to Uint8Array
         const array1 = new Uint8Array(Buffer.from(accessToken))
-        const array2 = new Uint8Array(bufferSerializedMessage)
+        const array2 = new Uint8Array(Buffer.from(JSON.stringify(value)))
         const array3 = new Uint8Array(Buffer.from(userId))
         const array4 = dateUint8Array
 
@@ -94,6 +81,7 @@ router.post('/trans/sign', async (req, res) => {
             res.json({
                 signature,
                 validatorId,
+                deadline: date,
             });
         } else {
             res.status(400).json({

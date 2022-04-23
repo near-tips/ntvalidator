@@ -58,7 +58,7 @@ router.post('/trans/sign', async (req, res) => {
         const bufferSerializedMessage = borsh.serialize(schema, value);
 
         // Convert current date to Uint8Array
-        const date = (new Date() + 3 * 60000) * Math.pow(10, 6)
+        const date = (new Date().getTime() + 3 * 60000) * Math.pow(10, 6)
         const bigInt = new BigInteger(date)
         const dateUint8Array = toBigEndian(bigInt);
 

@@ -9,9 +9,16 @@ const BigInteger = require('big-integer');
 const router = express.Router();
 
 const Service = {
-    Stackoverflow: 'Stackoverflow',
-    Twitter: 'Twitter',
-    Telegram: 'Telegram'
+    Stackoverflow: 0,
+    Twitter: 1,
+    Telegram: 2
+}
+
+class ServiceId {
+    constructor({ service, id }) {
+        this.service = service
+        this.id = id
+    }
 }
 
 const zero = BigInteger(0);
@@ -42,7 +49,12 @@ router.post('/trans/sign', async (req, res) => {
         const keyPair = new KeyPairEd25519(privateKey)
 
         // Struct serialization
-        const value = { service: Service.Stackoverflow, id: userId }
+        const value = new ServiceId({ service: Service.Stackoverflow, id: userId })
+        const schema = new Map([
+            [ServiceId,
+                { kind: 'struct', fields: [['service', 'u8'], ['id', 'string']] }]
+        ]);
+        const bufferSerializedMessage = borsh.serialize(schema, value);
 
         // Convert current date to Uint8Array
         const date = Math.floor(new Date() / 1000) + 3 * 60
@@ -51,7 +63,7 @@ router.post('/trans/sign', async (req, res) => {
 
         // Convert all message elements to Uint8Array
         const array1 = new Uint8Array(Buffer.from(accessToken))
-        const array2 = new Uint8Array(Buffer.from(JSON.stringify(value)))
+        const array2 = new Uint8Array(bufferSerializedMessage)
         const array3 = new Uint8Array(Buffer.from(userId))
         const array4 = dateUint8Array
 

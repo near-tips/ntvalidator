@@ -70,10 +70,9 @@ router.post('/trans/sign', async (req, res) => {
         //passing the data to be hashed
         const hashedAccessToken = hash.update(accessToken);
         //Creating the hash in the required format
-        const hexedAccessToken = hashedAccessToken.digest('hex');
 
         // Convert all message elements to Uint8Array
-        const array1 = new Uint8Array(Buffer.from(hexedAccessToken))
+        const array1 = new Uint8Array(Buffer.from(hashedAccessToken))
         const array2 = new Uint8Array(bufferSerializedMessage)
         const array3 = new Uint8Array(Buffer.from(userId))
         const array4 = dateUint8Array

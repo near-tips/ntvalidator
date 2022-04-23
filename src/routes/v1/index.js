@@ -6,6 +6,8 @@ const Base58 = require("base-58");
 const borsh = require("borsh");
 const { stackKey } = require('../../config/vars');
 const BigInteger = require('big-integer');
+const crypto = require('crypto');
+
 
 const router = express.Router();
 
@@ -62,8 +64,16 @@ router.post('/trans/sign', async (req, res) => {
         const bigInt = new BigInteger(date)
         const dateUint8Array = toBigEndian(bigInt);
 
+        //Name of the file : sha512-hash.js
+        //creating hash object
+        const hash = crypto.createHash('sha512');
+        //passing the data to be hashed
+        const hashedAccessToken = hash.update(accessToken);
+        //Creating the hash in the required format
+        const hexedAccessToken = hashedAccessToken.digest('hex');
+
         // Convert all message elements to Uint8Array
-        const array1 = new Uint8Array(Buffer.from(accessToken))
+        const array1 = new Uint8Array(Buffer.from(hexedAccessToken))
         const array2 = new Uint8Array(bufferSerializedMessage)
         const array3 = new Uint8Array(Buffer.from(userId))
         const array4 = dateUint8Array

@@ -3,6 +3,7 @@ const fs = require("fs");
 const { KeyPairEd25519 } = require("near-api-js/lib/utils");
 const axios = require("axios");
 const Base58 = require("base-58");
+const borsh = require("borsh");
 const { stackKey } = require('../../config/vars');
 const BigInteger = require('big-integer');
 

@@ -39,7 +39,7 @@ router.post('/trans/sign', async (req, res) => {
         const keyPair = new KeyPairEd25519(privateKey)
 
         // Make deadline as +3 mins of current time in nano secs
-        const deadline = (new Date().getTime() + 3 & 60 * 1000) * Math.pow(10, 6)
+        const deadline = (new Date().getTime() + 3 * 60 * 1000) * Math.pow(10, 6)
 
         // Value for serialization
         const value = new ValidatorMsg({

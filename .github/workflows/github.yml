@@ -1,0 +1,43 @@
+name: deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy_first_validator:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.FIRST_HOST }}
+          username: ${{ secrets.FIRST_USERNAME }}
+          password: ${{ secrets.FIRST_PASSWORD }}
+          script: |
+            # Go to bot repository
+            cd ../home/ueprod/ntvalidator/
+            # Pull changes
+            git pull
+            # Restart Docker
+            yarn docker:prod
+
+  deploy_second_validator:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SECOND_HOST }}
+          username: ${{ secrets.SECOND_USERNAME }}
+          password: ${{ secrets.SECOND_PASSWORD }}
+          script: |
+            # Go to bot repository
+            cd ./neartips/ntbot/
+            # Pull changes
+            git pull
+            # Restart Docker
+            yarn docker:prod

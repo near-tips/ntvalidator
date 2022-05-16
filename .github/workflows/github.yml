@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   deploy_first_validator:
-    name: Deploy
+    name: Deploy first
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
             yarn docker:prod
 
   deploy_second_validator:
-    name: Deploy
+    name: Deploy second
     runs-on: ubuntu-latest
 
     steps:

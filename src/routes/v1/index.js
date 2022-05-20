@@ -95,11 +95,20 @@ router.post('/trans/sign', async (req, res) => {
             });
         }
     } catch (error) {
-        console.log('error', error);
-        res.status(400).json({
-            success: false,
-            message: error
-        });
+        if (error.response) {
+            console.log('error', error.response.data);
+            res.status(error.response.status).json({
+                success: false,
+                message: error.response.data,
+            });
+        } else {
+            console.log('error', error);
+            res.status(400).json({
+                success: false,
+                message: error,
+            });
+        }
+
     }
 });
 

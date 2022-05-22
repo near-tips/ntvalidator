@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.FIRST_USERNAME }}
           password: ${{ secrets.FIRST_PASSWORD }}
           script: |
-            # Go to bot repository
+            # Go to validator repository
             cd ../home/ueprod/ntvalidator/
             # Pull changes
             git pull
@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.SECOND_USERNAME }}
           password: ${{ secrets.SECOND_PASSWORD }}
           script: |
-            # Go to bot repository
+            # Go to validator repository
             cd ./neartips/ntvalidator/
             # Pull changes
             git pull

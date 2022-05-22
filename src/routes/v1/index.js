@@ -5,6 +5,9 @@ const axios = require("axios");
 const Base58 = require("base-58");
 const borsh = require("borsh");
 const { stackKey } = require('../../config/vars');
+const { handleError } = require("../../utils/handleError");
+const { validate } = require("express-validation");
+const { sign } = require("../../validations/notify.validation");
 
 const router = express.Router();
 
@@ -29,7 +32,7 @@ class ServiceId {
     }
 }
 
-router.post('/trans/sign', async (req, res) => {
+router.post('/trans/sign', validate(sign, {}, {}), async (req, res) => {
     try {
         const { accessToken, userId, accountId } = req.body;
 
@@ -95,20 +98,14 @@ router.post('/trans/sign', async (req, res) => {
             });
         }
     } catch (error) {
-        if (error.response) {
-            console.log('error', error.response.data);
-            res.status(error.response.status).json({
-                success: false,
-                message: error.response.data,
-            });
-        } else {
-            console.log('error', error);
-            res.status(400).json({
-                success: false,
-                message: error,
-            });
-        }
-
+        const status = error.response ? error.response.status : 400;
+        const message = error.response ? error.response.data : error;
+        console.log('Notify error \n', message);
+        await handleError(message, 'trans/sign')
+        res.status(status).json({
+            success: false,
+            message,
+        });
     }
 });
 

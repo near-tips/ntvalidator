@@ -8,6 +8,8 @@ const v1 = require('./routes/v1');
 const routes = require('./routes');
 const morgan = require('morgan');
 const { logs, port, origin } = require('./config/vars');
+const { handleError } = require("./utils/handleError");
+const { ValidationError } = require("express-validation");
 
 /**
  * Express instance
@@ -41,6 +43,21 @@ app.use(cors({
 // mount api v1 routes
 app.use('/v1', v1);
 app.use('/', routes);
+
+app.use(async function (err, req, res, next) {
+    if (err instanceof ValidationError) {
+        await handleError(err, 'Validation')
+
+        return res.status(err.statusCode).json(err)
+    }
+
+    if (err) {
+        await handleError(err.details.body, 'Validation')
+        return res.status(500).json(err)
+    }
+
+    return next();
+})
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening at http://localhost:${port}`)
